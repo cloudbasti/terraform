@@ -1,4 +1,10 @@
 #!/bin/bash 
+
+# Set the hostname
+sudo hostnamectl set-hostname commander
+# Update /etc/hosts
+echo "127.0.0.1 commander" | sudo tee -a /etc/hosts
+
 #install ansible
 sudo apt update
 sudo apt -y upgrade
@@ -25,4 +31,6 @@ pip install kubernetes
 
 # set up ansible folders
 mkdir -pv ~/ansible/playbook ~/ansible/inventory
+
+
 

@@ -51,6 +51,10 @@ resource "aws_instance" "instance" {
   )
   
   user_data = file(var.config.user_data_path)
+
+  lifecycle {
+    ignore_changes = [user_data]
+  }
 }
 
 resource "aws_eip" "eip" {
