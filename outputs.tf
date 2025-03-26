@@ -36,12 +36,7 @@ Host kube-worker
     IdentityFile ${path.root}/../keys/aws_kubernetes_worker
     StrictHostKeyChecking no
   EOT
-  filename = "${path.module}/generated_ssh_config"
-  
-  provisioner "local-exec" {
-  command = "if not exist %USERPROFILE%\\.ssh mkdir %USERPROFILE%\\.ssh && type ${path.module}\\generated_ssh_config >> %USERPROFILE%\\.ssh\\config"
-  interpreter = ["cmd", "/C"]
-}
+  filename = "${path.module}/outputs/generated_ssh_config"
 }
 
 # Generate inventory.yml for Ansible with the correct format
@@ -62,11 +57,6 @@ k8s_workers:
       ansible_user: ubuntu
       ansible_ssh_private_key_file: ~/.ssh/aws_kubernetes_worker
   EOT
-  filename = "${path.module}/inventory.yml"
+  filename = "${path.module}/outputs/inventory.yml"
   
-  # Transfer inventory to commander node using Windows commands
-  # Simple direct command without revealing OS specifics
-  provisioner "local-exec" {
-    command = "scp -o StrictHostKeyChecking=no -i ${path.root}/../keys/aws_commander_key ${path.module}/inventory.yml ubuntu@${module.commander.instance_public_ip}:~/inventory.yml"
-  }
 }
