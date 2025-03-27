@@ -1,0 +1,23 @@
+{
+    "key_name": "aws-ansible-commander",
+    "security_group_name": "ansible-commander-sg",
+    "ami": "ami-0084a47cc718c111a",
+    "instance_type": "t2.micro",
+    "instance_name": "ansible-commander",
+    "public_key_path": "~/.ssh/aws_secrets/aws-ansible-commander.pub",
+    "private_key_path": "~/.ssh/aws_secrets/aws-ansible-commander",
+    "user_data_path": "./scripts/ansible-commander-setup.sh",
+    "ingress_rules": [
+      {
+        "description": "HTTPS",
+        "from_port": 443,
+        "to_port": 443,
+        "protocol": "tcp",
+        "cidr_blocks": ["0.0.0.0/0"]
+      }
+    ],
+    "tags": {
+      "Role": "AnsibleCommander",
+      "Environment": "Production"
+    }
+  }

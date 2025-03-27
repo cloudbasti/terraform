@@ -1,16 +1,16 @@
 # outputs.tf in your root module
 
 # Output the instance details for SSH config
-output "commander_hostname" {
-  value = module.commander.instance_public_ip
+output "ansible_commander_hostname" {
+  value = module.ansible_commander.instance_public_ip
 }
 
-output "kube_master_hostname" {
-  value = module.kube_master.instance_public_ip
+output "k8s_master_hostname" {
+  value = module.k8s_master.instance_public_ip
 }
 
-output "kube_worker_hostname" {
-  value = module.kube_worker.instance_public_ip
+output "k8s_worker_hostname" {
+  value = module.k8s_worker.instance_public_ip
 }
 
 # Generate SSH config file
@@ -18,22 +18,22 @@ resource "local_file" "ssh_config" {
   content = <<-EOT
 # Auto-generated SSH config - DO NOT EDIT MANUALLY
 
-Host commander
-    HostName ${module.commander.instance_public_ip}
+Host ansible-commander
+    HostName ${module.ansible_commander.instance_public_ip}
     User ubuntu
-    IdentityFile ${path.root}/../keys/aws_ansible_control_node
+    IdentityFile ~/.ssh/aws_secrets/aws-ansible-commander
     StrictHostKeyChecking no
 
-Host kube-master
-    HostName ${module.kube_master.instance_public_ip}
+Host k8s-master
+    HostName ${module.k8s_master.instance_public_ip}
     User ubuntu
-    IdentityFile ${path.root}/../keys/aws_kubernetes_master_key
+    IdentityFile ~/.ssh/aws_secrets/aws-k8s-master
     StrictHostKeyChecking no
 
-Host kube-worker
-    HostName ${module.kube_worker.instance_public_ip}
+Host k8s-worker
+    HostName ${module.k8s_worker.instance_public_ip}
     User ubuntu
-    IdentityFile ${path.root}/../keys/aws_kubernetes_worker
+    IdentityFile ~/.ssh/aws_secrets/aws-k8s-worker
     StrictHostKeyChecking no
   EOT
   filename = "${path.module}/outputs/generated_ssh_config"
@@ -43,20 +43,19 @@ Host kube-worker
 resource "local_file" "inventory" {
   content = <<-EOT
 ---
-k8s_masters:
+k8_master:
   hosts:
     master:
-      ansible_host: ${module.kube_master.instance_public_ip}
+      ansible_host: ${module.k8s_master.instance_public_ip}
       ansible_user: ubuntu
-      ansible_ssh_private_key_file: ~/.ssh/aws_kubernetes_master
+      ansible_ssh_private_key_file: ~/.ssh/aws_secrets/aws-k8s-master
 
-k8s_workers:
+k8_worker:
   hosts:
     worker:
-      ansible_host: ${module.kube_worker.instance_public_ip}
+      ansible_host: ${module.k8s_worker.instance_public_ip}
       ansible_user: ubuntu
-      ansible_ssh_private_key_file: ~/.ssh/aws_kubernetes_worker
+      ansible_ssh_private_key_file: ~/.ssh/aws_secrets/aws-k8s-worker
   EOT
   filename = "${path.module}/outputs/inventory.yml"
-  
 }

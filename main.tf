@@ -16,17 +16,23 @@ provider "aws" {
 }
 
 
-module "commander" {
-  source = "./modules/server"
-  config = var.server_configs["commander"]
+locals {
+  ansible_commander_config = jsondecode(file("${path.module}/infra_configs/ansible-commander-config.json"))
+  k8s_master_config   = jsondecode(file("${path.module}/infra_configs/k8s-master-config.json"))
+  k8s_worker_config   = jsondecode(file("${path.module}/infra_configs/k8s-worker-config.json"))
 }
 
-module "kube_master" {
+module "ansible_commander" {
   source = "./modules/server"
-  config = var.server_configs["kube_master"]
+  config = local.ansible_commander_config
 }
 
-module "kube_worker" {
+module "k8s_master" {
   source = "./modules/server"
-  config = var.server_configs["kube_worker"]
+  config = local.k8s_master_config
+}
+
+module "k8s_worker" {
+  source = "./modules/server"
+  config = local.k8s_worker_config
 }
