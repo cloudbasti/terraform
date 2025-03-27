@@ -1,0 +1,23 @@
+{
+    "key_name": "aws-k8s-master",
+    "security_group_name": "k8s-master-sg",
+    "ami": "ami-03250b0e01c28d196",
+    "instance_type": "t2.medium",
+    "instance_name": "k8s-master",
+    "public_key_path": "~/.ssh/aws_secrets/aws-k8s-master.pub",
+    "private_key_path": "~/.ssh/aws_secrets/aws-k8s-master",
+    "user_data_path": "./scripts/aws-k8s-master-setup.sh",
+    "ingress_rules": [
+      {
+        "description": "Kubernetes API",
+        "from_port": 6443,
+        "to_port": 6443,
+        "protocol": "tcp",
+        "cidr_blocks": ["0.0.0.0/0"]
+      }
+    ],
+    "tags": {
+      "Role": "K8sMaster",
+      "Environment": "Production"
+    }
+  }

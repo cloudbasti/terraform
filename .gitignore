@@ -55,3 +55,7 @@ terraform.rc
 *.pub
 .env
 *.env
+
+# inventory yml dont push to git with ips
+inventory.yml
+generated_ssh_config

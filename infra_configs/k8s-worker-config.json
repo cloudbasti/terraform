@@ -1,0 +1,30 @@
+{
+    "key_name": "aws-k8s-worker",
+    "security_group_name": "k8s-worker-sg",
+    "ami": "ami-03250b0e01c28d196",
+    "instance_type": "t2.medium",
+    "instance_name": "k8s-worker",
+    "public_key_path": "~/.ssh/aws_secrets/aws-k8s-worker.pub",
+    "private_key_path": "~/.ssh/aws_secrets/aws-k8s-worker",
+    "user_data_path": "./scripts/aws-k8s-worker-setup.sh",
+    "ingress_rules": [
+      {
+        "description": "Kubelet API",
+        "from_port": 10250,
+        "to_port": 10250,
+        "protocol": "tcp",
+        "cidr_blocks": ["0.0.0.0/0"]
+      },
+      {
+        "description": "NodePort Services",
+        "from_port": 30000,
+        "to_port": 32767,
+        "protocol": "tcp",
+        "cidr_blocks": ["0.0.0.0/0"]
+      }
+    ],
+    "tags": {
+      "Role": "K8sWorker",
+      "Environment": "Production"
+    }
+  }
