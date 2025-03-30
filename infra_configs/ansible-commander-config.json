@@ -9,9 +9,9 @@
     "user_data_path": "./scripts/ansible-commander-setup.sh",
     "ingress_rules": [
       {
-        "description": "HTTPS",
-        "from_port": 443,
-        "to_port": 443,
+        "description": "SSH",
+        "from_port": 2369,
+        "to_port": 2369,
         "protocol": "tcp",
         "cidr_blocks": ["0.0.0.0/0"]
       }

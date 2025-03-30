@@ -7,14 +7,6 @@ resource "aws_security_group" "security_group" {
   name        = var.config.security_group_name
   description = "Security group for ${var.config.instance_name}"
 
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] 
-  }
-  
   dynamic "ingress" {
     for_each = var.config.ingress_rules
     content {
